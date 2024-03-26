@@ -10,7 +10,7 @@ use serenity::gateway::ActivityData;
 use serenity::model::user::OnlineStatus;
 use tokio::time::Instant;
 use crate::replacer::{ReplacerError};
-use crate::resource::{GUH, NOREG};
+use crate::resource::{GUH, NOREG, DANK};
 
 
 pub(crate) struct Handler;
@@ -81,7 +81,7 @@ impl EventHandler for Handler {
         }
         let match_message = msg.content.to_lowercase();
 
-        if match_message.contains("guh") || match_message.contains("norway") {
+        if match_message.contains("guh") || match_message.contains("norway") || match_message.starts_with("!dank") {
             let mut response = CreateMessage::new();
 
             if msg.content.to_lowercase().contains("guh") {
@@ -90,6 +90,10 @@ impl EventHandler for Handler {
 
             if msg.content.to_lowercase().contains("norway") {
                 response = response.add_file(CreateAttachment::bytes(NOREG.to_vec(), "norway.png"));
+            }
+
+            if msg.content.to_lowercase().starts_with("!dank") {
+                response = response.add_file(CreateAttachment::bytes(DANK.to_vec(), "fdm_big.png"));
             }
 
             response = response.reference_message(&msg).allowed_mentions(CreateAllowedMentions::new().replied_user(false));
